@@ -3,6 +3,7 @@ package org.handler;
 import static org.http.HttpStatus.FORBIDDEN;
 import static org.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
+import org.http.HttpMethod;
 import org.http.HttpStatus;
 import org.http.request.HttpRequest;
 import org.http.response.HttpResponse;
@@ -45,8 +46,13 @@ public class ServletHandler {
 
     private boolean isForbiddenPath(HttpRequest request) {
         String path = request.getPath();
+        String method = request.getMethod();
 
         if (path.contains("..") || path.endsWith(".exe") || path.endsWith(".sh") || path.endsWith(".git") || path.endsWith(".bat")) {
+            return true;
+        }
+
+        if (!HttpMethod.isValidMethod(method)) {
             return true;
         }
 

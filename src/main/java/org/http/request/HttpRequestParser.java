@@ -33,7 +33,7 @@ public class HttpRequestParser {
         }
 
         Map<String, String> paramMap = new HashMap<>();
-        if (method.equals(POST)) {
+        if (method.equals(POST.name())) {
             StringBuilder bodyBuffer = new StringBuilder();
             while (reader.ready()) {
                 bodyBuffer.append((char)reader.read());
@@ -42,7 +42,7 @@ public class HttpRequestParser {
             if ("application/x-www-form-urlencoded".equalsIgnoreCase(headerMap.get("Content-Type"))) {
                 paramMap = parseQueryStr(bodyBuffer.toString());
             }
-        } else if (method.equals(GET) && path.contains("?")) {
+        } else if (method.equals(GET.name()) && path.contains("?")) {
             String[] split = path.split("\\?");
             path = split[0];
             paramMap = parseQueryStr(split[1]);

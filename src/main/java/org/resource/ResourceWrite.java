@@ -110,7 +110,6 @@ public class ResourceWrite {
         }
 
         String content = contentBuilder.toString();
-        logger.debug(content);
         Map<String, String> attributeMap = response.getAttributeMap();
 
         for (Map.Entry<String, String> entry : attributeMap.entrySet()) {

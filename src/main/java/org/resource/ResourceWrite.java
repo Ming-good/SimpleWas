@@ -81,7 +81,7 @@ public class ResourceWrite {
 
             if (resource == null) {
                 byte[] selfError = getSelfError(request, response).getBytes();
-                sendHeader(out, httpResCode.getMessage(),"text/html; charset=utf-8", selfError.length);
+                sendHeader(out, INTERNAL_SERVER_ERROR.getMessage(),"text/html; charset=utf-8", selfError.length);
                 raw.write(selfError);
                 raw.flush();
                 throw new FileNotFoundException("NOT FOUND ERRROR PAGES");

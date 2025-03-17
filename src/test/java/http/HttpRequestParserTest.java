@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import org.http.request.HttpRequest;
 import org.http.request.HttpRequestParser;
 import org.junit.Test;

@@ -2,7 +2,7 @@
   "port": 8080,
   "virtualHost": [
     {"serverNm":"www.a.co.kr",
-    "documentRoot": "web",
+    "documentRoot": "web/a",
       "index": "/index.html",
     "errorPages": {
       "403": "/errors/403.html",

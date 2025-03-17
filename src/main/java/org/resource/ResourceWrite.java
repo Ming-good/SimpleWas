@@ -32,8 +32,8 @@ public class ResourceWrite {
     private String target = "";
     private HashMap<String, String> errorPage = null;
 
-    public ResourceWrite(String documentRoot, String indexFileNm, HashMap<String, String> errorPage) {
-        resourceLoader = new ResourceLoader(documentRoot);
+    public ResourceWrite(ResourceLoader resourceLoader, String indexFileNm, HashMap<String, String> errorPage) {
+        this.resourceLoader = resourceLoader;
         this.target = indexFileNm;
         this.errorPage = errorPage;
     }

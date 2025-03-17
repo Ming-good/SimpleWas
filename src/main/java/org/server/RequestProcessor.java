@@ -7,7 +7,7 @@ import java.util.List;
 import org.handler.ServletHandler;
 import org.http.request.HttpRequest;
 import org.http.request.HttpRequestParser;
-import org.http.response.Dispacher;
+import org.http.response.VirtualHostMapper;
 import org.http.response.HttpResponse;
 import org.mapping.strategy.PackageMappingStrategy;
 import org.resource.ResourceWrite;
@@ -28,20 +28,21 @@ public class RequestProcessor implements Runnable {
     public void run() {
         try {
             HttpRequest httpRequest = HttpRequestParser.parse(connection.getInputStream());
-            ResourceWrite resourceWrite = Dispacher.parse(httpRequest.getHeaderMap().get("Host"), virtualHostList);
+            ResourceWrite resourceWrite = VirtualHostMapper.parse(httpRequest.getHeaderMap().get("Host"), virtualHostList);
             HttpResponse httpResponse = new HttpResponse(resourceWrite.getTarget(), resourceWrite, connection.getOutputStream());
 
             ServletHandler requestHandler = new ServletHandler(new PackageMappingStrategy());
             requestHandler.handler(httpRequest, httpResponse);
 
         } catch (IOException e) {
-            logger.error("Error talking to " + connection.getRemoteSocketAddress(), e);
+            logger.error("[WAS] Error I/O " + connection.getRemoteSocketAddress(), e);
         } catch (NoSuchFieldException e) {
-            logger.error("Error not found host " + connection.getRemoteSocketAddress(), e);
+            logger.error("[WAS] Error not found host " + connection.getRemoteSocketAddress(), e);
         } finally {
             try {
                 connection.close();
-            } catch (IOException ex) {
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }

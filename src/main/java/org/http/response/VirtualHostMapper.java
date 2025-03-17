@@ -3,9 +3,10 @@ package org.http.response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.resource.ResourceLoader;
 import org.resource.ResourceWrite;
 
-public class Dispacher {
+public class VirtualHostMapper {
 
     public static ResourceWrite parse(String host, List<HashMap<String, Object>> virtualHostList) throws NoSuchFieldException {
         String documentRoot = null;
@@ -24,6 +25,6 @@ public class Dispacher {
             throw new NoSuchFieldException();
         }
 
-        return new ResourceWrite(documentRoot, indexFileNm, errorPage);
+        return new ResourceWrite( new ResourceLoader(documentRoot), indexFileNm, errorPage);
     }
 }

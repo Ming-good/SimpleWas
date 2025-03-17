@@ -3,7 +3,7 @@
   "virtualHost": [
     {"serverNm":"www.a.co.kr",
     "documentRoot": "web/a",
-      "index": "/index.html",
+      "index": "/hellow.html",
     "errorPages": {
       "403": "/errors/403.html",
       "404": "/errors/404.html",
@@ -11,11 +11,7 @@
     }},
     {"serverNm": "www.b.co.kr",
       "documentRoot": "web2",
-      "index": "/index.html",
-      "errorPages": {
-        "403": "/errors/403.html",
-        "404": "/errors/404.html",
-        "500": "/errors/500.html"
-      }}
+      "index": "/index.html"
+    }
     ]
 }

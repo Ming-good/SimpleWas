@@ -94,7 +94,7 @@ public class ResourceWrite {
             raw.write(content);
             raw.flush();
         } catch (FileNotFoundException e){
-            logger.error("[WAS] NOT FOUND ERRROR PAGES");
+            logger.error("[WAS] NOT FOUND ERRROR PAGES", e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

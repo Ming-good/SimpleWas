@@ -38,6 +38,8 @@ public class RequestProcessor implements Runnable {
             logger.error("[WAS] Error I/O " + connection.getRemoteSocketAddress(), e);
         } catch (NoSuchFieldException e) {
             logger.error("[WAS] Error not found host " + connection.getRemoteSocketAddress(), e);
+        } catch (Exception e) {
+            logger.error("[WAS] Error " + connection.getRemoteSocketAddress(), e);
         } finally {
             try {
                 connection.close();

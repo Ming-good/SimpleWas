@@ -83,7 +83,7 @@ public class ServletHandlerTest {
     }
 
     @Test
-    public void 디폴트페이지호출() {
+    public void 디폴트페이지호출() throws Exception {
         when(request.getPath()).thenReturn("/index.html");
         when(request.getMethod()).thenReturn("GET");
         when(response.getIndexFileNm()).thenReturn("/index.html");

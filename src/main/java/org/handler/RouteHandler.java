@@ -19,7 +19,7 @@ public class RouteHandler implements SimpleServlet{
     }
 
     @Override
-    public void service(HttpRequest req, HttpResponse res) {
+    public void service(HttpRequest req, HttpResponse res) throws Exception {
         this.simpleServlet.service(req,res);
     }
 }

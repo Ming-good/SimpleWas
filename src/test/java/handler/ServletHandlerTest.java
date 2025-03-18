@@ -7,6 +7,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import org.handler.RouteHandler;
 import org.handler.ServletHandler;
 import org.http.HttpMethod;
 import org.http.HttpStatus;
@@ -28,6 +29,7 @@ public class ServletHandlerTest {
     private ResourceWrite resourceWrite;
     private ResourceLoader resourceLoader;
     private SimpleServlet servlet;
+    private RouteHandler routeHandler;
 
     @Before
     public void init() {
@@ -38,14 +40,16 @@ public class ServletHandlerTest {
         resourceLoader = mock(ResourceLoader.class);
         resourceWrite = mock(ResourceWrite.class);
         servlet = mock(SimpleServlet.class);
-
+        routeHandler = mock(RouteHandler.class);
         when(response.getResourceWrite()).thenReturn(resourceWrite);
     }
 
     @Test
-    public void 상위_디렉토리_접근() {
+    public void 상위_디렉토리_접근() throws Exception {
+        RouteHandler mock = mock(RouteHandler.class);
         when(request.getPath()).thenReturn("/../service.TimeView");
         when(request.getMethod()).thenReturn(HttpMethod.GET.name());
+        when(strategy.getServlet(request.getPath())).thenReturn(mock);
 
         servletHandler.handler(request, response);
 
@@ -54,9 +58,23 @@ public class ServletHandlerTest {
     }
 
     @Test
-    public void 허용되지_않은_메소드_호출() {
+    public void 허용되지_않은_메소드_호출() throws Exception {
         when(request.getPath()).thenReturn("/service.TimeView");
         when(request.getMethod()).thenReturn("PUT");
+        when(strategy.getServlet(request.getPath())).thenReturn(routeHandler);
+
+        servletHandler.handler(request, response);
+
+        then(resourceWrite).should().error(request, response, HttpStatus.FORBIDDEN);
+        then(resourceWrite).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    public void 지정된_서블릿의_메소드_이외_메소드_호출() throws Exception {
+        when(request.getPath()).thenReturn("/service.TimeView");
+        when(request.getMethod()).thenReturn("POST");
+        when(strategy.getServlet(request.getPath())).thenReturn(routeHandler);
+        when(routeHandler.getMethod()).thenReturn(HttpMethod.GET);
 
         servletHandler.handler(request, response);
 
@@ -95,11 +113,12 @@ public class ServletHandlerTest {
 
     @Test
     public void 서블릿실행() throws Exception {
+        RouteHandler routeHandler = new RouteHandler(servlet, HttpMethod.GET);
         when(request.getPath()).thenReturn("/service.TimeView");
         when(request.getMethod()).thenReturn("GET");
         when(response.getIndexFileNm()).thenReturn("/index.html");
         when(response.getResourceWrite("/service.TimeView")).thenReturn(resourceWrite);
-        when(strategy.getServlet(request.getPath())).thenReturn(servlet);
+        when(strategy.getServlet(request.getPath())).thenReturn(routeHandler);
 
         servletHandler.handler(request, response);
 

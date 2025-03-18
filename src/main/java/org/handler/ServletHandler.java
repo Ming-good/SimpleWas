@@ -22,19 +22,21 @@ public class ServletHandler {
     public void handler(HttpRequest request, HttpResponse response) {
 
         try {
-            if (isForbiddenPath(request)) {
-                sendError(request,response,FORBIDDEN);
-                return;
-            }
 
             if (isIndexRequest(request,response)) {
                 forwardResource(request,response);
                 return;
             }
 
-            SimpleServlet simpleServlet = strategy.getServlet(request.getPath());
+            RouteHandler simpleServlet = (RouteHandler) strategy.getServlet(request.getPath());
+
             if (simpleServlet == null) {
                 forwardResource(request,response,request.getPath());
+                return;
+            }
+
+            if (isForbiddenPath(request, simpleServlet.getMethod())) {
+                sendError(request,response,FORBIDDEN);
                 return;
             }
 
@@ -44,7 +46,7 @@ public class ServletHandler {
         }
     }
 
-    private boolean isForbiddenPath(HttpRequest request) {
+    private boolean isForbiddenPath(HttpRequest request, HttpMethod servletMethod) {
         String path = request.getPath();
         String method = request.getMethod();
 
@@ -53,6 +55,10 @@ public class ServletHandler {
         }
 
         if (!HttpMethod.isValidMethod(method)) {
+            return true;
+        }
+
+        if (!method.equalsIgnoreCase(servletMethod.name())) {
             return true;
         }
 
